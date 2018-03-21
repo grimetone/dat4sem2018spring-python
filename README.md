@@ -2,6 +2,14 @@
 
 Repository containing the course material for the elective course "Getting Things Done with Python" (Spring 2018) at CPH Business Academy (www.cphbusiness.dk).
 
+
+# Your Easter Egg!
+
+The first two members of this course that find the easter egg will get a Python book!
+
+![](lecture_notes/images/commander_keen_easteregg.png)
+
+
 # Organisational Notes
 
 Find a detailed description of the plan and the curriculum for the semester here:
