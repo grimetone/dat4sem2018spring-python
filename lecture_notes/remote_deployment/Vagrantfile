@@ -1,0 +1,55 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+# Get the list of possible Doplet sizes with:
+#     vagrant digitalocean-list sizes $DIGITAL_OCEAN_TOKEN
+# Get the list of possible Doplet regions with:
+#     vagrant digitalocean-list regions $DIGITAL_OCEAN_TOKEN
+# see more on https://github.com/devopsgroup-io/vagrant-digitalocean
+Vagrant.configure("2") do |config|
+  config.vm.box = 'digital_ocean'
+  config.vm.box_url = "https://github.com/devopsgroup-io/vagrant-digitalocean/raw/master/box/digital_ocean.box"
+  config.ssh.private_key_path = '~/.ssh/id_rsa'
+  config.vm.synced_folder ".", "/vagrant", type: "rsync"
+  config.vm.define "webserver", primary: true do |server|
+
+    server.vm.provider :digital_ocean do |provider|
+      provider.ssh_key_name = ENV["SSH_KEY_NAME"]
+      provider.token = ENV["DIGITAL_OCEAN_TOKEN"]
+      provider.image = 'ubuntu-16-04-x64'
+      provider.region = 'fra1'
+      provider.size = '1gb'
+      provider.privatenetworking = true
+    end
+
+    server.vm.hostname = "webserver"
+    server.vm.provision "shell", inline: <<-SHELL
+    echo "Installing Anaconda..."
+    sudo wget https://repo.continuum.io/archive/Anaconda3-4.4.0-Linux-x86_64.sh -O ~/Anaconda3-4.4.0-Linux-x86_64.sh
+
+    bash ~/Anaconda3-4.4.0-Linux-x86_64.sh -b
+    
+    echo ". $HOME/.bashrc" >> $HOME/.bash_profile
+    echo "export PATH=$HOME/anaconda3/bin:$PATH" >> $HOME/.bash_profile
+    export PATH="$HOME/anaconda3/bin:$PATH"
+
+    pip install pygal
+
+    cp /vagrant/server.py $HOME/
+    cp /vagrant/github_analysis.py $HOME/
+
+    nohup python ./server.py >> /tmp/plot_server.log 2>&1 &
+
+    echo "==================================================================="
+    echo "=                             DONE                                ="
+    echo "==================================================================="
+    echo "To log onto the VM:"
+    echo "$ vagrant ssh"
+    SHELL
+  end
+
+
+  config.vm.provision "shell", privileged: false, inline: <<-SHELL
+    sudo apt-get update
+  SHELL
+end
