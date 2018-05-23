@@ -1,3 +1,12 @@
+# Project Hand-in Procedure
+
+  * Create a repository on Github, which includes everything, the code of your project, all related artifacts, etc.
+  * Create a Markdown (.md) file called README.md in the root of your project.
+  * That README.md describes what this project does, how it works, how it is setup, etc.
+  * Create a release of your project on Github, see https://help.github.com/articles/creating-releases/.
+  * Hand-in a link to this release on Moodle. Latest hand-in is on 3. Jun. 12:00 (noon).
+
+
 # Getting Things Done with Python
 
 Repository containing the course material for the elective course "Getting Things Done with Python" (Spring 2018) at CPH Business Academy (www.cphbusiness.dk).
